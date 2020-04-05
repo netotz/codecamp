@@ -1,5 +1,5 @@
 n = int(input())
 
-feelings = ' that '.join('I love' if i % 2 == 0 else 'I hate' for i in range(1, n + 1))
+s = ' that I '.join(('hate', 'love')[i%2] for i in range(n))
 
-print(feelings, 'it')
+print(f'I {s} it')
