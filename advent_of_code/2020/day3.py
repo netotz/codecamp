@@ -11,7 +11,39 @@ SLOPES = [
 with open('input3.txt') as inputfile:
     input3 = inputfile.read().splitlines()
 
+def ref_count_trees(mymap, right, down):
+    '''
+    Refactored solutions, all of them are slower.
+    '''
+    pos = 0
+    trees = 0
+    for line in mymap[down::down]:
+        pos = (pos + right) % len(line)
+        trees += line[pos] == '#'
+    return trees
+
+    trees = 0
+    for i, line in enumerate(mymap[down::down]):
+        pos = ((i + 1) * right) % len(line)
+        trees += line[pos] == '#'
+    return trees
+
+    pos = 0
+    return sum(
+        # walrus operator (:=) in Python >= 3.8
+        line[(pos := (pos + right) % len(line))] == '#'
+        for line in mymap[down::down]
+    )
+
+    return sum(
+        line[((i + 1) * right) % len(line)] == '#'
+        for i, line in enumerate(mymap[down::down])
+    )
+
 def count_trees(mymap, right, down):
+    '''
+    Used to solve the puzzle.
+    '''
     trees = 0
     pos = 0
     linelen = len(mymap[0])
