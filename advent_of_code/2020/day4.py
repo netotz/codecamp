@@ -1,5 +1,6 @@
 from functools import reduce
 from operator import xor
+from string import hexdigits
 
 # yes I need to learn regex
 VALIDATIONS = {
@@ -11,7 +12,7 @@ VALIDATIONS = {
         else (59 <= int(h[:-2]) <= 76 if h[-2:] == 'in' else False),
     'hcl': lambda c:
         len(c) == 7 and c[0] == '#' and all(
-            x in set(map(str, range(10))) or x in set(map(chr, range(97, 103)))
+            x in hexdigits
             for x in c[1:]
         ),
     'ecl': lambda c:
