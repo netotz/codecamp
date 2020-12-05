@@ -2,24 +2,26 @@ with open('inputs/input5.txt') as inputfile:
     input5 = inputfile.read().splitlines()
 
 def get_half_diff(lower, upper):
-    return (upper - lower) // 2
+    return (upper - lower) / 2
 
 def get_seat_id(seat):
     bottomrow, toprow = 0, 127
     for r in seat[:7]:
+        delta = get_half_diff(bottomrow, toprow)
         if r == 'F':
-            toprow = bottomrow + get_half_diff(bottomrow, toprow)
+            toprow -= delta
         elif r == 'B':
-            bottomrow = toprow - get_half_diff(bottomrow, toprow)
+            bottomrow += delta
 
     left, right = 0, 7
     for c in seat[7:]:
+        delta = get_half_diff(left, right)
         if c == 'L':
-            right = left + get_half_diff(left, right)
+            right -= delta
         elif c == 'R':
-            left = right - get_half_diff(left, right)
+            left += delta
 
-    return (toprow * 8) + right
+    return (int(toprow) * 8) + int(right)
 
 def get_max_id(passes):
     return max(get_seat_id(s) for s in passes)
