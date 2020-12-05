@@ -13,7 +13,7 @@ def solve(lines, part):
     valids = (is_valid(l, part) for l in lines)
     return sum(valids)
 
-with open('input2.txt') as inputfile:
+with open('inputs/input2.txt') as inputfile:
     input2 = inputfile.read().splitlines()
 
 answer1 = solve(input2, 1)

@@ -7,7 +7,7 @@ def solve(entries, repeat):
             return prod(comb)
 
 def get_input():
-    with open('input1.txt') as inputfile:
+    with open('inputs/input1.txt') as inputfile:
         return map(int, inputfile.read().splitlines())
 
 answer1 = solve(get_input(), 2)

@@ -53,7 +53,7 @@ def count_completes(batchfile):
 def count_valids(batchfile):
     return sum(is_complete_valid(p) for p in batchfile)
 
-with open('input4.txt') as inputfile:
+with open('inputs/input4.txt') as inputfile:
     content = inputfile.read().splitlines()
     input4 = parse_input(content)
 

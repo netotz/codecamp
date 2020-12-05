@@ -8,7 +8,7 @@ SLOPES = [
     (1, 2)
 ]
 
-with open('input3.txt') as inputfile:
+with open('inputs/input3.txt') as inputfile:
     input3 = inputfile.read().splitlines()
 
 def ref_count_trees(mymap, right, down):
