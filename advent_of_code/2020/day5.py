@@ -49,11 +49,26 @@ def get_max_id(passes):
     return max(get_seat_id(s) for s in passes)
 
 def get_missing_id(passes):
+    '''
+    Used to solve puzzle.
+    '''
     prev = 0
     for seat_id in sorted((get_seat_id(s) for s in passes)):
         if seat_id == prev + 2:
             return seat_id - 1
         prev = seat_id
+
+def ref_get_missing_id(passes):
+    '''
+    Refactored, faster and better solution.
+
+    The sum of IDs as if they were all occupied,
+    minus the sum of actual occupied IDs,
+    will result in the one missing ID.
+    '''
+    ids = [ref_get_seat_id(s) for s in passes]
+    min_id, max_id = min(ids), max(ids)
+    return ((len(ids) + 1) * (min_id + max_id)) // 2 - sum(ids)
 
 answer1 = get_max_id(input5)
 answer2 = get_missing_id(input5)
