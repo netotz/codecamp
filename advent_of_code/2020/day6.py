@@ -1,20 +1,12 @@
-from functools import reduce
+def parse_input(raw_input):
+    return [
+        # strip multiline strings when testing
+        [line.strip() for line in group.split('\n')]
+        for group in raw_input.split('\n\n')
+    ]
 
-def parse_input(plane_answers):
-    groups_answers = []
-    append = groups_answers.append
-    group = []
-    for line in plane_answers:
-        if line == '':
-            append(group)
-            group = []
-        else:
-            group += [line.strip()]
-    return groups_answers
-
-with open('inputs/input6.txt') as inputfile:
-    content = inputfile.read().splitlines()
-    input6 = parse_input(content)
+with open('inputs/input6.txt') as file:
+    input6 = parse_input(file.read())
 
 def count_any_yeses(groups):
     return sum(
@@ -24,7 +16,7 @@ def count_any_yeses(groups):
 
 def count_every_yeses(groups):
     return sum(
-        len(reduce(lambda p1, p2: set(p1) & set(p2), g))
+        len(set.intersection(*(set(p) for p in g)))
         for g in groups
         if g
     )
@@ -34,6 +26,7 @@ answer2 = count_every_yeses(input6)
 
 def test():
     raw = '''
+
         abc
 
         a
@@ -50,8 +43,7 @@ def test():
 
         b
 
-
     '''
-    sample = parse_input(raw.splitlines())
+    sample = parse_input(raw)
     assert count_any_yeses(sample) == 11
     assert count_every_yeses(sample) == 6
