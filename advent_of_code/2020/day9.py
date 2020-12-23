@@ -7,19 +7,17 @@ with open('inputs/input9.txt') as file:
 def check_sum(preamble, number):
     for p in preamble:
         dif = number - p
-        if dif != p and dif in set(preamble):
+        if dif != p and dif in preamble:
             return True
 
 def get_first_invalid(data, length):
     i = 0
-    j = i + length
-    while j < len(data):
+    while (j := i + length) < len(data):
         preamble = data[i:j]
         number = data[j]
-        if not check_sum(preamble, number):
+        if not check_sum(set(preamble), number):
             return number
         i += 1
-        j += 1
 
 def get_weakness(data, invalid):
     contiguous = list()
