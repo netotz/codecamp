@@ -1,5 +1,6 @@
-import re
+from itertools import groupby
 import math
+import operator
 
 def parse_input(raw):
     return sorted(int(n) for n in raw.splitlines())
@@ -8,13 +9,11 @@ with open('inputs/input10.txt') as file:
     input10 = parse_input(file.read())
 
 def get_differences(joltages):
-    return [
-        j - current
-        for j, current in zip(
-            joltages + [joltages[-1] + 3],
-            [0] + joltages
-        )
-    ]
+    return list(map(
+        operator.sub,
+        joltages + [joltages[-1] + 3],
+        [0] + joltages
+    ))
 
 def multiply_diffs(differences):
     return differences.count(1) * differences.count(3)
@@ -22,11 +21,8 @@ def multiply_diffs(differences):
 def count_arrangements(differences):
     return math.prod(
         (2 ** (len(m) - 1)) - (len(m) == 4)
-        for m in re.findall(
-            r'(1+)3',
-            ''.join(map(str, differences))
-        )
-        if len(m) > 1
+        for k, g in groupby(differences)
+        if k == 1 and len((m := list(g))) > 1
     )
 
 differences = get_differences(input10)
@@ -48,10 +44,9 @@ def test():
         '4\n'
     )
     sample = parse_input(raw)
-    differences = get_differences(sample)
-    # print(differences)
-    assert multiply_diffs(differences) == 7 * 5
-    assert count_arrangements(differences) == 8
+    diffs = get_differences(sample)
+    assert multiply_diffs(diffs) == 7 * 5
+    assert count_arrangements(diffs) == 8
 
     raw = (
         '28\n'
@@ -87,7 +82,6 @@ def test():
         '3\n'
     )
     sample = parse_input(raw)
-    differences = get_differences(sample)
-    print(differences)
-    assert multiply_diffs(differences) == 22 * 10
-    assert count_arrangements(differences) == 19208
+    diffs = get_differences(sample)
+    assert multiply_diffs(diffs) == 22 * 10
+    assert count_arrangements(diffs) == 19208
