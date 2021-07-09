@@ -1,7 +1,7 @@
 from typing import Iterable
 
 
-def detect_repeated(array: Iterable, number_to_detect: int, min_repetitions: int) -> bool:
+def detect_repeated(array: Iterable[int], number_to_detect: int, min_repetitions: int) -> bool:
     return sum(n == number_to_detect for n in array) >= min_repetitions
 
 
