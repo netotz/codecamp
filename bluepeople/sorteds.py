@@ -1,30 +1,16 @@
 def join_sorteds(array1, array2):
-    if array1[0] < array2[0]:
-        lesser = array1
-        greater = array2
-    else:
-        lesser = array2
-        greater = array1
-    while True:
-        loop_again = False
-        for i in range(len(lesser) - 1):
-            for j in range(len(greater)):
-                print(lesser[i] , greater[j] , lesser[i + 1])
-                if lesser[i] <= greater[j] <= lesser[i + 1]:
-                    lesser.insert(i + 1, greater[j])
-                    greater.pop(j)
-                    print(lesser, greater)
-                    loop_again = True
-                    break
-                else:
-                    break
-            if loop_again:
-                break
-        if not loop_again:
-            break
-    if greater:
-        lesser.extend(greater)
-    return lesser
+    i = 0
+    j = 0
+    merged = list()
+    while i < len(array1) and j < len(array2):
+        if array1[i] < array2[j]:
+            merged.append(array1[i])
+            i += 1
+        else:
+            merged.append(array2[j])
+            j += 1
+    merged += array1[i:] if i < len(array1) else array2[j:]
+    return merged
 
 
 def test():
