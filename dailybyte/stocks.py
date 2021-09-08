@@ -6,7 +6,13 @@ import pytest
 
 def get_profit(prices: List[int]) -> int:
     '''
-    My first solution
+    My first solution.
+
+    It's just getting both max and min values in prices,
+    then using them to get their indexes to ensure selling after buying.
+    It works but it loops the list twice, plus searching for indexes.
+
+    This takes ~42 ms with 1 million elements.
     '''
     max_price = max(prices)
     max_index = prices.index(max_price)
@@ -18,7 +24,12 @@ def get_profit(prices: List[int]) -> int:
 
 def get_profit_for(prices: List[int]) -> int:
     '''
-    Refactored solution from Daily Byte
+    Refactored solution from Daily Byte.
+
+    They only use one loop and no need to do extra searching for indexes.
+
+    But oh surprise, this takes ~340 ms with 1 million elements.
+    I think this is due getting maxs and mins several times.
     '''
     min_price = sys.maxsize
     profit = 0
