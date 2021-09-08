@@ -1,15 +1,34 @@
 from typing import List
+import sys
 
 import pytest
 
 
 def get_profit(prices: List[int]) -> int:
+    '''
+    My first solution
+    '''
     max_price = max(prices)
     max_index = prices.index(max_price)
 
     min_price = min(prices)
     min_index = prices.index(min_price)
     return max_price - min_price if min_index < max_index else 0
+
+
+def get_profit_for(prices: List[int]) -> int:
+    '''
+    Refactored solution from Daily Byte
+    '''
+    min_price = sys.maxsize
+    profit = 0
+    for price in prices:
+        if price > min_price:
+            profit = max(profit, price - min_price)
+        else:
+            min_price = min(min_price, price)
+    return profit
+
 
 @pytest.mark.parametrize(
     'prices, profit', [
@@ -19,5 +38,9 @@ def get_profit(prices: List[int]) -> int:
         ([3, 3, 3, 3, 3], 0)
     ]
 )
-def test(prices: List[int], profit: int) -> None:
-    assert get_profit(prices) == profit
+class Test:
+    def test(self, prices, profit):
+        assert get_profit(prices) == profit
+
+    def test_for(self, prices, profit):
+        assert get_profit_for(prices) == profit
