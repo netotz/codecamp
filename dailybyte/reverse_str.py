@@ -10,7 +10,8 @@ def reverse_string(string: str) -> str:
         ("Cat", "taC"),
         ("The Daily Byte", "etyB yliaD ehT"),
         ("civic", "civic"),
-        ("", "")
+        ("", ""),
+        ("\x18\u8000", "\u8000\x18")
     ]
 )
 def test(string, reversed):
