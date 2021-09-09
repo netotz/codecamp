@@ -13,6 +13,7 @@ def get_profit(prices: List[int]) -> int:
     It works but it loops the list twice, plus searching for indexes.
 
     This takes ~42 ms with 1 million elements.
+    Apparently it's faster thanks to builtins.
     '''
     max_price = max(prices)
     max_index = prices.index(max_price)
