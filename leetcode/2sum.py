@@ -4,11 +4,12 @@ import pytest
 
 
 def two_sum(nums: List[int], target: int) -> List[int]:
-    for i in range(len(nums)):
-        n = nums[0]
-        nums.pop(0)
-        if (dif := target - n) in nums:
-            i_dif = nums.index(dif) + i + 1
+    mutable_nums = list(nums)
+    for i in range(len(mutable_nums)):
+        n = mutable_nums[0]
+        mutable_nums.pop(0)
+        if (dif := target - n) in mutable_nums:
+            i_dif = mutable_nums.index(dif) + i + 1
             if i != i_dif:
                 return [i, i_dif]
 
@@ -18,12 +19,13 @@ def two_sum_reverse(nums: List[int], target: int) -> List[int]:
     `.pop()` now takes O(1) and there's no need to use `in` operator,
     but I don't like how the try block looks
     '''
-    i = len(nums) - 1
+    mutable_nums = list(nums)
+    i = len(mutable_nums) - 1
     while i >= 0:
-        n = nums[-1]
-        nums.pop()
+        n = mutable_nums[-1]
+        mutable_nums.pop()
         try:
-            i_dif = nums.index(target - n)
+            i_dif = mutable_nums.index(target - n)
             if i != i_dif:
                 return [i_dif, i]
         except ValueError:
