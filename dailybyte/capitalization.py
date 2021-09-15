@@ -2,9 +2,7 @@ import pytest
 
 
 def is_capitalized(string: str) -> bool:
-    return string.islower() or string.isupper() or (
-        len(string) > 1 and string[0].isupper() and string[1:].islower()
-    )
+    return len(string) == 1 or string[1:].islower() or string.isupper()
 
 
 @pytest.mark.parametrize(
