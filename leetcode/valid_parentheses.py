@@ -38,7 +38,8 @@ def is_valid(string: str) -> bool:
         ('([)]', False),
         ('{[]}', True),
         ('([[]()]{{}{()}})', True),
-        ('([]{{([][](())}[])}})', False)
+        ('([]{{([][](())}[])}})', False),
+        ('([[]()]{{}{()}})(', False)
     )
 )
 def test(string, is_it):
