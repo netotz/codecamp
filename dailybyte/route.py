@@ -7,18 +7,13 @@ def is_original_position(route: str) -> bool:
     DOWN = 'D'
     UP = 'U'
 
-    vertical = 0
-    horizontal = 0
+    position = 0
     for move in route:
-        if move == LEFT:
-            horizontal -= 1
-        elif move == RIGHT:
-            horizontal += 1
-        elif move == DOWN:
-            vertical -= 1
+        if move == RIGHT or move == UP:
+            position += 1
         else:
-            vertical += 1
-    return vertical == horizontal == 0
+            position -= 1
+    return position == 0
 
 
 @pytest.mark.parametrize(
