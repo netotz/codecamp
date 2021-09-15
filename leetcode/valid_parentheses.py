@@ -15,7 +15,7 @@ def is_valid(string: str) -> bool:
 
     stack = list()
     for char in string:
-        if char in parentheses.keys():
+        if char in parentheses:
             # push last opened
             stack.append(char)
         else:
