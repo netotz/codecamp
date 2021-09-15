@@ -33,7 +33,8 @@ def get_beiju(string: str) -> str:
         ('[[]][][]Happy_Birthday_to_Tsinghua_University', 'Happy_Birthday_to_Tsinghua_University'),
         ('Plain_text', 'Plain_text'),
         ('', ''),
-        ('Go_[to_[head', 'headto_Go_')
+        ('Go_[to_[head', 'headto_Go_'),
+        ('Go_[to_[head_]then_to_tail_[back_to_head', 'back_to_headhead_to_Go_then_to_tail_')
     )
 )
 def test(string, beiju):
