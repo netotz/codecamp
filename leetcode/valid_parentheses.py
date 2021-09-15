@@ -2,6 +2,11 @@ import pytest
 
 
 def is_valid(string: str) -> bool:
+    '''
+    For what I know:
+    Time complexity O(n),
+    as operations of both dictionary and stack are O(1)
+    '''
     parentheses = {
         '(': ')',
         '[': ']',
@@ -32,4 +37,3 @@ def is_valid(string: str) -> bool:
 )
 def test(string, is_it):
     assert is_valid(string) == is_it
-
