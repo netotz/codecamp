@@ -11,6 +11,10 @@ class Node:
 
 
 def reverse(head: Optional[Node]) -> Optional[Node]:
+    '''
+    T = O(n)
+    S = O(1)
+    '''
     prev = None
     while head:
         current = head
@@ -18,3 +22,17 @@ def reverse(head: Optional[Node]) -> Optional[Node]:
         current.nxt = prev
         prev = current
     return prev
+
+
+def reverse_recursively(head: Optional[Node]) -> Optional[Node]:
+    '''
+    T = O(n)
+    S = O(n)
+    '''
+    if not head or not head.nxt:
+        return head
+    newhead = reverse_recursively(head.nxt)
+    head.nxt.nxt = head
+    # new tail
+    head.nxt = None
+    return newhead
