@@ -157,11 +157,33 @@ var invoices = new List<Invoice> {
             }
         }
     },
+    new Invoice {
+        Id = 4,
+        CreationDate = DateTime.Now,
+        InvoiceItems = new List<InvoiceItem> {
+            new InvoiceItem {
+                Name = "Orange",
+                Count = 3,
+                Price = 3.25m
+            },
+            new InvoiceItem {
+                Name = "Apple",
+                Count = 3,
+                Price = 4
+            }
+        }
+    }
 };
 
-// my quick test
+// a quick, manual, definitely improvable test
 var repository = new InvoiceRepository(invoices.AsQueryable());
 var dictionary = repository.GetItemsReport(null, null);
 foreach (var item in dictionary) {
     Console.WriteLine($"{item.Key}: {item.Value}");
 }
+
+var total = repository.GetTotal(1);
+Console.WriteLine(total);
+
+var totalUnpaid = repository.GetTotalOfUnpaid();
+Console.WriteLine(totalUnpaid);
