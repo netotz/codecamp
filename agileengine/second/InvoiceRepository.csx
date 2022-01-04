@@ -79,12 +79,27 @@ public class InvoiceRepository : IInvoiceRepository
     /// <summary>
     /// Should return a dictionary where the name of an invoice item is a key and the number of bought items is a value.
     /// The number of bought items should be summed within a given period of time (from, to). Both the from date and the end date can be null.
+    /// * Assumptions:
+    /// * If <paramref>from</paramref> is null, it is set to <see cref="DateTime.MinValue" /> so only invoices up to <paramref>to</paramref> are included.
+    /// * If <paramref>to</paramref> is null, it is set to <see cref="DateTime.MaxValue" /> only invoices since <paramref>from</paramref> are included.
+    /// * If both <paramref>from</paramref> and <paramref>to</paramref> are null, all invoices are included.
     /// </summary>
     /// <param name="from"></param>
     /// <param name="to"></param>
     /// <returns></returns>
     public IReadOnlyDictionary<string, long> GetItemsReport(DateTime? from, DateTime? to)
     {
-        throw new NotImplementedException();
+        if (from is null) {
+            from = DateTime.MinValue;
+        }
+        if (to is null) {
+            to = DateTime.MaxValue;
+        }
+
+        return _invoices
+            .Where(i => i.AcceptanceDate >= from && i.AcceptanceDate <= to)
+            .SelectMany(i => i.InvoiceItems)
+            .GroupBy(i => i.Name)
+            .ToDictionary(g => g.Key, g => (long)g.Count());
     }
 }
