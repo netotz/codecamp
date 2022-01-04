@@ -19,7 +19,7 @@ public class Invoice
     // A date when an invoice was paid (optional).
     public DateTime? AcceptanceDate { get; set; }
     // A collection of invoice items for a given invoice (can be empty but is never null).
-    public IList<InvoiceItem> InvoiceItems { get; }
+    public IList<InvoiceItem> InvoiceItems { get; set; }
 
     public Invoice()
     {
@@ -100,6 +100,68 @@ public class InvoiceRepository : IInvoiceRepository
             .Where(i => i.AcceptanceDate >= from && i.AcceptanceDate <= to)
             .SelectMany(i => i.InvoiceItems)
             .GroupBy(i => i.Name)
-            .ToDictionary(g => g.Key, g => (long)g.Count());
+            .ToDictionary(g => g.Key, g => (long)g.Sum(i => i.Count));
     }
+}
+
+// my quick test case
+var invoices = new List<Invoice> {
+    new Invoice {
+        Id = 1,
+        CreationDate = DateTime.Now,
+        AcceptanceDate = DateTime.Now,
+        InvoiceItems = new List<InvoiceItem> {
+            new InvoiceItem {
+                Name = "Egg",
+                Count = 5,
+                Price = 2.5m
+            },
+            new InvoiceItem {
+                Name = "Apple",
+                Count = 1,
+                Price = 4
+            }
+        }
+    },
+    new Invoice {
+        Id = 2,
+        CreationDate = DateTime.Now,
+        AcceptanceDate = DateTime.Now,
+        InvoiceItems = new List<InvoiceItem> {
+            new InvoiceItem {
+                Name = "Egg",
+                Count = 10,
+                Price = 2.5m
+            },
+            new InvoiceItem {
+                Name = "Orange",
+                Count = 3,
+                Price = 3.25m
+            }
+        }
+    },
+    new Invoice {
+        Id = 3,
+        CreationDate = DateTime.Now,
+        AcceptanceDate = DateTime.Now,
+        InvoiceItems = new List<InvoiceItem> {
+            new InvoiceItem {
+                Name = "Egg",
+                Count = 8,
+                Price = 2.5m
+            },
+            new InvoiceItem {
+                Name = "Apple",
+                Count = 2,
+                Price = 4
+            }
+        }
+    },
+};
+
+// my quick test
+var repository = new InvoiceRepository(invoices.AsQueryable());
+var dictionary = repository.GetItemsReport(null, null);
+foreach (var item in dictionary) {
+    Console.WriteLine($"{item.Key}: {item.Value}");
 }
