@@ -34,6 +34,9 @@ import pytest
 
 
 def count_subarrays(arr: list[int]) -> list[int]:
+    '''
+    O(n)
+    '''
     # stack to store indexes of arr to compare against current.
     # bottom of stack, if any, is index of max(arr[:i]), the greatest yet
     stack = []
@@ -41,6 +44,7 @@ def count_subarrays(arr: list[int]) -> list[int]:
     # count subarrays that end with arr[i]
     # by checking valid subarrays from left of arr
     lefts = [0 for _ in arr]
+    # O(n)
     for i in range(len(arr)):
         # if top of stack (decreasing previous indexes) is less than current,
         # discard it as it's useless against current, and check next
@@ -63,6 +67,7 @@ def count_subarrays(arr: list[int]) -> list[int]:
     # now count subarrays that begin with arr[i]
     # by checking valid subarrays from right of arr by reversing indexes
     rights = [0 for _ in arr]
+    # O(n)
     for i in range(len(arr) - 1, -1, -1):
         while stack and arr[stack[-1]] < arr[i]:
             stack.pop()
