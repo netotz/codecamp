@@ -50,6 +50,7 @@ def count_pairs_combs(arr: list[int], k: int) -> int:
     '''
     O(n)
     '''
+    # use a hashmap to store the frequency of each unique value
     frequencies = dict()
 
     # O(n)
@@ -62,14 +63,17 @@ def count_pairs_combs(arr: list[int], k: int) -> int:
     pairs_count = 0
     # O(n)
     for key in frequencies:
+        # a value that has a frequency of 0 was used before
         if frequencies[key] == 0:
             continue
 
         diff = k - key
         if diff == key:
+            # use reduced formula of combinations for pairs
             pairs_count += frequencies[key] * (frequencies[key] - 1) / 2
         elif diff in frequencies:
             pairs_count += frequencies[key] * frequencies[diff]
+            # set frequency to 0 so it will be skipped
             frequencies[diff] = 0
     
     return pairs_count
