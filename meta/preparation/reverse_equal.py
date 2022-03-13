@@ -46,15 +46,18 @@ def are_they_equal_brute(array_a: list[int], array_b: list[int]) -> bool:
     O(n ** 3)
     '''
     are_equal = True
+    # iterate each element of both arrays at same time
     # O(n ** 3)
     for i in range(len(array_a)):
         if array_a[i] != array_b[i]:
             are_equal = False
-            
+            # when elements at same index are different,
+            # loop rest of B until element is found
             # O(n ** 2 )
             for j in range(i + 1, len(array_b)):
                 if array_b[j] == array_a[i]:
                     # O(n)
+                    # when element is found, reverse subarray B[i:j + 1] in-place
                     array_b = reverse_subarray(array_b, i, j)
                     are_equal = True
 
