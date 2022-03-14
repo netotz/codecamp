@@ -51,18 +51,17 @@ def findSignatureCounts(arr: list[int]) -> list[int]:
 
     # O(n)
     for i in range(len(arr)):
-        j = i
-        while True:
-            student = arr[j]
+        j = -1
+        student = arr[i]
+        # increment signatures for current student
+        # before she receives her own yearbook
+        while j != i:
             # sign current yearbook
             signatures[i] += 1
             # student will send current yearbook to student at
             j = student - 1
-            # if she will send it to herself
-            if j == i:
-                # stop incrementing signatures for this student,
-                # count for next student
-                break
+            # next student
+            student = arr[j]
     
     return signatures
 
