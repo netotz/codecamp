@@ -56,10 +56,13 @@ def are_they_equal_brute(array_a: list[int], array_b: list[int]) -> bool:
             # O(n ** 2 )
             for j in range(i + 1, len(array_b)):
                 if array_b[j] == array_a[i]:
-                    # O(n)
                     # when element is found, reverse subarray B[i:j + 1] in-place
+                    # O(n)
                     array_b = reverse_subarray(array_b, i, j)
+                    # now elements at same index i are equal
                     are_equal = True
+                    break
+            # if element wasn't found, A cannot be equal to B
 
     return are_equal
 
@@ -85,7 +88,7 @@ def are_they_equal_counters(array_a: list[int], array_b: list[int]) -> bool:
     '''
     O(n)
     '''
-    # hashmap of counts of each element
+    # hash map of counts of each element
     # O(n)
     a_counter = Counter(array_a)
     # O(n)

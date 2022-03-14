@@ -39,6 +39,17 @@ Both students now hold their own yearbook, so the process is complete.
 Each student received 1 signature.
 '''
 
+# when a student start passing her yearbook,
+# she starts a cycle in which next students will keep passing it
+# until she has it again.
+# All the students that conform a cycle will have the same amount of signatures.
+# The student who started its cycle is the 'root' of the rest.
+# So if we have the amount of signatures of the root of a cycle,
+# we have it too for the rest of the students in that cycle,
+# therefore we don't have to count it for them if we already know
+# their root.
+# By doing this each student will be 'visited' only once.
+
 
 import pytest
 
@@ -48,11 +59,9 @@ def findSignatureCounts(arr: list[int]) -> list[int]:
     O(n)
     '''
     signatures = [0] * len(arr)
-    # root indexes,
-    # every index has a root index
-    # who started the passing cycle of which it's part of
+    # root indexes, students who started a cycle
     roots = [0] * len(arr)
-    # visited indexes from previous cycles
+    # visited indexes in previous cycles
     # to skip their counting
     visiteds = [False] * len(arr)
 
@@ -75,9 +84,10 @@ def findSignatureCounts(arr: list[int]) -> list[int]:
             j = student - 1
             # next index is being visited
             visiteds[j] = True
-            # root of next index is current index
+            # root of next index is current index,
+            # because current is part of the cycle
             roots[j] = i
-            # next student
+            # next student at j
             student = arr[j]
     
     # set signatures of yearbooks that weren't explored
