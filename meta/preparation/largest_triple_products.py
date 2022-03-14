@@ -37,10 +37,16 @@ def findMaxProduct(arr: list[int]) -> list[int]:
     O(n)
     '''
     output = [0] * len(arr)
+    # min-heap, an ordered binary tree,
+    # first element always is the smallest of all.
+    # in this case, max size of our heap will be h = 3
     heap = []
     
     # O(n)
     for i in range(len(arr)):
+        # push current element to heap at the end,
+        # swap its way up until a parent is smaller.
+        # O(log h) = O(log 3) = O(1)
         heapq.heappush(heap, arr[i])
 
         # if there're not enough elements in the heap
@@ -50,6 +56,9 @@ def findMaxProduct(arr: list[int]) -> list[int]:
 
         # if there's an extra element in the heap
         if len(heap) == 4:
+            # pop smallest, move last element to first,
+            # swap its way down until both children are greater.
+            # O(log h) = O(1)
             heapq.heappop(heap)
         
         # math.prod is for Python 3.8
