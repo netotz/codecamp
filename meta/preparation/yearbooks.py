@@ -48,9 +48,22 @@ def findSignatureCounts(arr: list[int]) -> list[int]:
     O(n)
     '''
     signatures = [0] * len(arr)
+    # root indexes,
+    # every index has a root index
+    # who started the passing cycle of which it's part of
+    roots = [0] * len(arr)
+    # visited indexes from previous cycles
+    # to skip their counting
+    visiteds = [False] * len(arr)
 
     # O(n)
     for i in range(len(arr)):
+        # if student at i was already visited
+        if visiteds[i]:
+            continue
+
+        visiteds[i] = True
+
         j = -1
         student = arr[i]
         # increment signatures for current student
@@ -58,10 +71,21 @@ def findSignatureCounts(arr: list[int]) -> list[int]:
         while j != i:
             # sign current yearbook
             signatures[i] += 1
-            # student will send current yearbook to student at
+            # student will send current yearbook to student at next index j
             j = student - 1
+            # next index is being visited
+            visiteds[j] = True
+            # root of next index is current index
+            roots[j] = i
             # next student
             student = arr[j]
+    
+    # set signatures of yearbooks that weren't explored
+    # because they had a root
+    # O(n)
+    for i in range(len(signatures)):
+        if roots[i] > -1:
+            signatures[i] = signatures[roots[i]]
     
     return signatures
 
