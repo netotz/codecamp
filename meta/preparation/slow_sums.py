@@ -30,16 +30,20 @@ def getTotalTime(arr: list[int]) -> int:
     '''
     O(n log n)
     '''
-    penalty = 0
-    operation = 0
+    if len(arr) == 1:
+        return 0
+
+    # by sorting the array in descending order,
+    # the biggest sums will be done
     # O(n log n)
     sorted_arr = sorted(arr, reverse=True)
     
+    operation = sorted_arr[0] + sorted_arr[1]
+    penalty = operation
     # O(n)
-    for i in range(len(sorted_arr) - 1):
-        operation = sorted_arr[i] + sorted_arr[i + 1]
+    for i in range(2, len(sorted_arr)):
+        operation += sorted_arr[i]
         penalty += operation
-        sorted_arr[i + 1] = operation
     
     return penalty
 
