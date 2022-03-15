@@ -49,6 +49,7 @@ def explore_tree(
     '''
     # if node has left child and it's first time
     if node.left and not is_back:
+        # add only right child to stacks so node won't be visited again
         if node.right:
             explored_nodes.append(node.right)
             explored_levels.append(level + 1)
@@ -112,10 +113,22 @@ root_2.left.left.right.right = TreeNode(6)
 root_2.right.left =TreeNode(14)
 root_2.right.right = TreeNode(16)
 
+root_3 = TreeNode(8)
+root_3.left = TreeNode(3)
+root_3.right = TreeNode(10)
+root_3.left.left = TreeNode(1)
+root_3.left.right = TreeNode(6)
+root_3.left.right.left = TreeNode(4)
+root_3.left.right.right = TreeNode(7)
+root_3.right.right = TreeNode(14)
+root_3.right.right.left = TreeNode(13)
+root_3.right.right.left.right = TreeNode(21)
+
 
 @pytest.mark.parametrize(
     ('root', 'count'), (
         (root_1, 4),
+        (root_2, 5),
         (root_2, 5)
     )
 )
