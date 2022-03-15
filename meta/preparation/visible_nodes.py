@@ -25,6 +25,7 @@ output = 4
 
 
 from dataclasses import dataclass
+
 import pytest
 
 
