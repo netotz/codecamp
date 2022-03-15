@@ -41,15 +41,18 @@ def explore_tree(
         count: int,
         is_back: bool) -> int:
     '''
-    Explores one of the subtrees of `node` to count the left-most node of each level.
+    Explores one of the subtrees of `node` to count
+    the left-most node of each level.
 
     O(n) because it halves the current tree each time,
     so it "visits" each node once.
     '''
     # if node has left child and it's first time
     if node.left and not is_back:
-        explored_nodes.append(node)
-        explored_levels.append(level)
+        if node.right:
+            explored_nodes.append(node.right)
+            explored_levels.append(level + 1)
+
         node = node.left
         level += 1
         is_back = False
@@ -75,7 +78,15 @@ def explore_tree(
         max_level = level
         count += 1
     
-    return explore_tree(node, explored_nodes, explored_levels, max_level, level, count, is_back)
+    return explore_tree(
+        node,
+        explored_nodes,
+        explored_levels,
+        max_level,
+        level,
+        count,
+        is_back
+    )
 
 
 def visible_nodes(root) -> int:
