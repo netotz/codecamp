@@ -24,6 +24,7 @@ output = 4
 # worst case it's a linked list where max depth = n.
 
 
+import collections
 from dataclasses import dataclass
 
 import pytest
@@ -36,63 +37,40 @@ class TreeNode:
     right: 'TreeNode' = None
 
 
-def explore_tree(
-        node: TreeNode,
-        right_nodes: list[TreeNode],
-        right_levels: list[int],
-        max_level: int,
-        level: int,
-        is_back: bool) -> int:
+def level_order_traverse(root: TreeNode) -> int:
     '''
-    Explores one of the subtrees of `node` to count
-    the left-most node of each level.
+    Does an iterative BFS level-order traversal to `root` from right to left,
+    and returns its depth in O(n) time.
+    '''
+    # queue of nodes in current level,
+    # starting with the root
+    current_level_queue = collections.deque([root])
+    # queue of nodes in next level
+    next_level_queue = collections.deque()
 
-    O(n) because it halves the current tree each time,
-    so it "visits" each node once.
-    '''
-    # if node has left child and it's first time
-    if node.left and not is_back:
-        # push only the right child of node to the stack,
-        # to jump directly to it after its sibling subtree is explored
+    depth = 0
+    while len(current_level_queue) > 0:
+        # current node is first from current queue
+        node = current_level_queue.popleft()
+
+        # enqueue node's children, if any, in this order
         if node.right:
-            right_nodes.append(node.right)
-            # push level of right node too to another stack
-            # to keep track of its depth
-            right_levels.append(level + 1)
+            next_level_queue.append(node.right)
+        if node.left:
+            next_level_queue.append(node.left)
 
-        node = node.left
-        level += 1
-        is_back = False
-    # if node has right child
-    elif node.right:
-        node = node.right
-        level += 1
-        is_back = False
-    # if node doesn't have children
-    else:
-        # if there's no right node to explore,
-        if len(right_nodes) == 0:
-            # then tree has been fully explored,
-            # visible nodes from left equal the tree's depth
-            return max_level + 1
-        
-        # jump to last right node to explore its subtree
-        node = right_nodes.pop()
-        level = right_levels.pop()
-        is_back = True
-
-    if not is_back and level > max_level:
-        max_level = level
+        # if there are no more nodes in current level
+        # then current node is its last one,
+        # in this case the left-most one too
+        # because it's a right to left traversal
+        if len(current_level_queue) == 0:
+            # swap queues, start visiting next level
+            current_level_queue = next_level_queue
+            next_level_queue = collections.deque()
+            
+            depth += 1
     
-    # explore left subtree of node
-    return explore_tree(
-        node,
-        right_nodes,
-        right_levels,
-        max_level,
-        level,
-        is_back
-    )
+    return depth
 
 
 def get_max_depth(root: TreeNode) -> int:
@@ -119,10 +97,6 @@ def get_max_depth_2(root: TreeNode) -> int:
     depth = max(depth, get_max_depth_2(root.left) + 1)
     depth = max(depth, get_max_depth_2(root.right) + 1)
     return depth
-
-
-def visible_nodes(root: TreeNode) -> int:
-    return get_max_depth_2(root)
 
 
 root_1 = TreeNode(8)
@@ -161,6 +135,13 @@ linked_list.right.right = TreeNode(2)
 
 
 @pytest.mark.parametrize(
+    ('method'), (
+        level_order_traverse,
+        get_max_depth,
+        get_max_depth_2
+    )
+)
+@pytest.mark.parametrize(
     ('root', 'count'), (
         (root_1, 4),
         (root_2, 5),
@@ -168,5 +149,5 @@ linked_list.right.right = TreeNode(2)
         (linked_list, 3)
     )
 )
-def test(root: TreeNode, count: int) -> None:
-    assert visible_nodes(root) == count
+def test(method, root: TreeNode, count: int) -> None:
+    assert method(root) == count
