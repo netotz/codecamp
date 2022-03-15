@@ -64,7 +64,7 @@ def level_order_traverse(root: TreeNode) -> int:
         # in this case the left-most one too
         # because it's a right to left traversal
         if len(current_level_queue) == 0:
-            # swap queues, start visiting next level
+            # swap queues to start visiting next level
             current_level_queue = next_level_queue
             next_level_queue = collections.deque()
             
