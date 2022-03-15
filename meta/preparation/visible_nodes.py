@@ -20,6 +20,9 @@ Example
 output = 4
 '''
 
+# the problem is basically asking for the maximum depth of the tree.
+# worst case it's a linked list where max depth = n.
+
 
 from dataclasses import dataclass
 import pytest
@@ -34,11 +37,10 @@ class TreeNode:
 
 def explore_tree(
         node: TreeNode,
-        explored_nodes: list[TreeNode],
-        explored_levels: list[int],
+        right_nodes: list[TreeNode],
+        right_levels: list[int],
         max_level: int,
         level: int,
-        count: int,
         is_back: bool) -> int:
     '''
     Explores one of the subtrees of `node` to count
@@ -49,10 +51,13 @@ def explore_tree(
     '''
     # if node has left child and it's first time
     if node.left and not is_back:
-        # add only right child to stacks so node won't be visited again
+        # push only the right child of node to the stack,
+        # to jump directly to it after its sibling subtree is explored
         if node.right:
-            explored_nodes.append(node.right)
-            explored_levels.append(level + 1)
+            right_nodes.append(node.right)
+            # push level of right node too to another stack
+            # to keep track of its depth
+            right_levels.append(level + 1)
 
         node = node.left
         level += 1
@@ -62,36 +67,35 @@ def explore_tree(
         node = node.right
         level += 1
         is_back = False
-    # if node don't have children
+    # if node doesn't have children
     else:
-        # if stack is empty
-        if len(explored_nodes) == 0:
-            # then tree has been fully explored
-            return count
+        # if there's no right node to explore,
+        if len(right_nodes) == 0:
+            # then tree has been fully explored,
+            # visible nodes from left equal the tree's depth
+            return max_level + 1
         
-        # go back to last node to explore right subtree
-        node = explored_nodes.pop()
-        level = explored_levels.pop()
+        # jump to last right node to explore its subtree
+        node = right_nodes.pop()
+        level = right_levels.pop()
         is_back = True
-    
-    # if current level is maximum depth yet
+
     if not is_back and level > max_level:
         max_level = level
-        count += 1
     
+    # explore left subtree of node
     return explore_tree(
         node,
-        explored_nodes,
-        explored_levels,
+        right_nodes,
+        right_levels,
         max_level,
         level,
-        count,
         is_back
     )
 
 
-def visible_nodes(root) -> int:
-    return explore_tree(root, [], [], 0, 0, 1, False)
+def visible_nodes(root: TreeNode) -> int:
+    return explore_tree(root, [], [], 0, 0, False)
 
 
 root_1 = TreeNode(8)
@@ -124,13 +128,18 @@ root_3.right.right = TreeNode(14)
 root_3.right.right.left = TreeNode(13)
 root_3.right.right.left.right = TreeNode(21)
 
+linked_list = TreeNode(0)
+linked_list.right = TreeNode(1)
+linked_list.right.right = TreeNode(2)
+
 
 @pytest.mark.parametrize(
     ('root', 'count'), (
         (root_1, 4),
         (root_2, 5),
-        (root_2, 5)
+        (root_2, 5),
+        (linked_list, 3)
     )
 )
-def test(root, count):
+def test(root: TreeNode, count: int) -> None:
     assert visible_nodes(root) == count
