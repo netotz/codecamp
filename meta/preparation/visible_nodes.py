@@ -94,8 +94,21 @@ def explore_tree(
     )
 
 
+def get_max_depth(root: TreeNode) -> int:
+    '''
+    O(2n)? = O(n)
+    '''
+    if root is None:
+        return 0
+    
+    return max(
+        get_max_depth(root.left) + 1,
+        get_max_depth(root.right) + 1
+    )
+
+
 def visible_nodes(root: TreeNode) -> int:
-    return explore_tree(root, [], [], 0, 0, False)
+    return get_max_depth(root)
 
 
 root_1 = TreeNode(8)
