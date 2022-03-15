@@ -107,8 +107,21 @@ def get_max_depth(root: TreeNode) -> int:
     )
 
 
+def get_max_depth_2(root: TreeNode) -> int:
+    '''
+    O(2n) = O(n)
+    '''
+    if root is None:
+        return 0
+    
+    depth = 0
+    depth = max(depth, get_max_depth_2(root.left) + 1)
+    depth = max(depth, get_max_depth_2(root.right) + 1)
+    return depth
+
+
 def visible_nodes(root: TreeNode) -> int:
-    return get_max_depth(root)
+    return get_max_depth_2(root)
 
 
 root_1 = TreeNode(8)
