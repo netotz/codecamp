@@ -21,7 +21,7 @@ output = 4
 '''
 
 # the problem is basically asking for the maximum depth of the tree.
-# worst case it's a linked list where max depth = n.
+# worst case it's a linked list where depth = n.
 
 
 import collections
@@ -40,7 +40,11 @@ class TreeNode:
 def level_order_traverse(root: TreeNode) -> int:
     '''
     Does an iterative BFS level-order traversal to `root` from right to left,
-    and returns its depth in O(n) time.
+    and returns its depth.
+    
+    O(n) time
+
+    O(n) space
     '''
     # queue of nodes in current level,
     # starting with the root
@@ -75,7 +79,9 @@ def level_order_traverse(root: TreeNode) -> int:
 
 def get_max_depth(root: TreeNode) -> int:
     '''
-    O(2n)? = O(n)
+    O(2n)? = O(n) time
+
+    O(n) space
     '''
     if root is None:
         return 0
@@ -88,7 +94,9 @@ def get_max_depth(root: TreeNode) -> int:
 
 def get_max_depth_2(root: TreeNode) -> int:
     '''
-    O(2n) = O(n)
+    O(2n) = O(n) time
+
+    O(n) space
     '''
     if root is None:
         return 0
