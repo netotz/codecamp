@@ -27,6 +27,7 @@ The fifth query is GET 2, and the value at index 2 is true.
 '''
 
 
+import bisect
 import heapq
 import pytest
 
@@ -90,6 +91,55 @@ def answer_queries_heaps(queries: list[list[int]], n: int) -> list[int]:
                 # O(log n)
                 heapq.heappush(heap, b)
 
+    return output
+
+
+def answer_queries_bisect(queries: list[list[int]], n: int) -> list[int]:
+    '''
+    Using a "binary search list",
+    which is a list that's always sorted even after inserting,
+    the runtime of GET is reduced to O(log n),
+    while runtime of SET is increased to O(n).
+    However the overall complexity is still reduced by a factor of log n.
+
+    Time: O(qn)
+
+    Space: O(n)
+    '''
+    SET = 1
+    GET = 2
+
+    # binary search list (BSL),
+    # its indexes will be called "positions",
+    # which are 0-based too
+    bsl = []
+    output = []
+
+    # O(qn)
+    for query, index in queries:
+        # O(log n + n) = O(n)
+        if query == SET:
+            # find position to insert target index
+            # as to keep the list sorted
+            # O(log n)
+            position = bisect.bisect_left(bsl, index)
+            # O(n)
+            bsl.insert(position, index)
+        # O(log n)
+        elif query == GET:
+            # get position where target index would be inserted
+            # as if it were a SET query
+            # O(log n)
+            position = bisect.bisect_left(bsl, index)
+
+            # if the position is less than BSL size,
+            # it's within the range of BSL elements,
+            # meaning that the index at the position
+            # is the smallest of the indexes
+            # that are greater than or equal to target index
+            min_true = bsl[position] if position < len(bsl) else -1
+            output.append(min_true)
+    
     return output
 
 
