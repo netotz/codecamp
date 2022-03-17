@@ -32,6 +32,19 @@ import pytest
 
 
 def answer_queries_heaps(queries: list[list[int]], n: int) -> list[int]:
+    '''
+    Worst case for GET is O(n log n) because you'd need to pop all elements minus 1.
+    Popping from heap is O(log n), and since you're popping them all,
+    you're "destructing" the heap which has the same complexity as constructing it:
+    O(n log n), because you're visiting each element.
+
+    The size of the heap can be up to n, the size of the boolean array
+    as it stores its indices, not the size of queries array Q.
+    
+    Time: O(qn log n)
+    
+    Space: O(n)
+    '''
     SET = 1
     GET = 2
 
@@ -41,9 +54,10 @@ def answer_queries_heaps(queries: list[list[int]], n: int) -> list[int]:
     # worst case |heap| = n
     heap = []
 
-    # O(q)
+    # O(qn log n)
     for query, index in queries:
         if query == SET:
+            # push True index to heap
             # O(log n)
             heapq.heappush(heap, index)
             continue
@@ -52,11 +66,11 @@ def answer_queries_heaps(queries: list[list[int]], n: int) -> list[int]:
             backup = []
             # if target index is greater than heap root,
             # which is the minimum index that is True,
-            # discard it and check next root,
+            # pop it and check next root,
             # which is new minimum but greater than previous minimum
             # O(n log n)
             while len(heap) > 0 and index > heap[0]:
-                # pop root to a backup for future GETs
+                # backup popped root for future GETs
                 # O(log n)
                 min_true = heapq.heappop(heap)
                 backup.append(min_true)
@@ -65,7 +79,8 @@ def answer_queries_heaps(queries: list[list[int]], n: int) -> list[int]:
             # there's no True value at the right of index
             if len(heap) == 0:  
                 output.append(-1)
-            # heap root is smallest right True index from target
+            # heap root is closest right True index from target,
+            # it's the first greater True index than target
             else:
                 output.append(heap[0])
             
