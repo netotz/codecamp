@@ -21,7 +21,9 @@ def level_order_traverse(root: TreeNode) -> list[int]:
     Does an iterative BFS level-order traversal to `root` from left to right,
     and returns the visible nodes from the right.
 
-    O(n)
+    O(n) time
+
+    O(n) space
     '''
     # edge case, if tree is empty
     if root is None:
@@ -79,7 +81,7 @@ def recursive_dfs(root: TreeNode) -> int:
         '''
         # if level is greater than count of visible nodes from upper levels,
         # it means that current node is the first visited one of that level,
-        # because the count of visible nodes is the depth of the tree
+        # since the count of visible nodes is the depth of the tree
         if level > len(visible_node_values):
             visible_node_values.append(node.val)
 
