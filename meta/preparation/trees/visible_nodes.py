@@ -16,7 +16,7 @@ Example
         / \     \\
        1   6     14
           / \    /
-         4   7  13            
+         4   7  13
 output = 4
 '''
 
@@ -81,7 +81,7 @@ def get_max_depth(root: TreeNode) -> int:
     '''
     O(2n)? = O(n) time
 
-    O(n) space
+    O(log n) space
     '''
     if root is None:
         return 0
@@ -96,7 +96,7 @@ def get_max_depth_2(root: TreeNode) -> int:
     '''
     O(2n) = O(n) time
 
-    O(n) space
+    O(log n) space
     '''
     if root is None:
         return 0
