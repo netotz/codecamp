@@ -16,6 +16,13 @@ Explanation
 On days 4, 5, and 6, FB has total revenue of $100, $150, and $210 respectively. Day 6 is the first time that FB has >= $200 of total revenue.
 '''
 
+# can input arrays be empty?
+# can revenues be negative? it doesn't really matter
+# are milestones sorted? no, look at examples
+# are revenues always increasing? no, look at examples
+# are milestones unique?
+
+
 import bisect
 
 import pytest
