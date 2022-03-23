@@ -44,6 +44,9 @@ def balancedSplitExists(arr: list[int]) -> bool:
     arr.sort()
     
     half_sum = 0
+    # sum elements one at a time until
+    # it equals half the total summation
+    # and left elements are less than right
     # O(n)
     for i in range(len(arr)):
         half_sum += arr[i]
@@ -60,26 +63,33 @@ def can_split_quickselect(arr: list[int]) -> bool:
     Space O(1)
     '''
     def partition(arr: list[int], left_sum: int) -> None:
-        lefts = list()
-        rights = list()
+        smallers = list()
+        greaters = list()
         
+        # temporary sum of elements less than pivot
         temp_sum = 0
         # O(n)
         for i in range(len(arr)):
             if arr[i] > pivot:
-                rights.append(arr[i])
+                greaters.append(arr[i])
                 continue
 
             temp_sum += arr[i]
             if arr[i] < pivot:
-                lefts.append(arr[i])
+                smallers.append(arr[i])
         
+        # if left sum is greater than right
         if temp_sum + left_sum > half_sum:
-            arr = lefts
+            # partition smaller elements in next iteration
+            arr = smallers
             return arr, left_sum
 
+        # if right sum is greater,
+        # update left sum with temporary sum
         left_sum += temp_sum
-        arr = rights
+        # and partition greater elements in next iteration
+        arr = greaters
+
         return arr, left_sum
     
     # O(n)
@@ -91,8 +101,12 @@ def can_split_quickselect(arr: list[int]) -> bool:
     half_sum = summation // 2
     left_sum = 0
 
-    while arr:
+    # while array is not empty
+    while len(arr) > 0:
+        # choose random pivot
         pivot = random.choice(arr)
+        # apply quickselect on pivot using partition
+        # and use whichever half has greater sum
         arr, left_sum = partition(arr, left_sum)
 
         if left_sum == half_sum:
