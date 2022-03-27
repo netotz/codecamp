@@ -62,7 +62,10 @@ def can_split_quickselect(arr: list[int]) -> bool:
     
     Space O(1)
     '''
-    def partition(arr: list[int], left_sum: int) -> None:
+    def partition() -> None:
+        nonlocal arr
+        nonlocal left_sum
+
         smallers = list()
         greaters = list()
         
@@ -82,15 +85,13 @@ def can_split_quickselect(arr: list[int]) -> bool:
         if temp_sum + left_sum > half_sum:
             # partition smaller elements in next iteration
             arr = smallers
-            return arr, left_sum
+            return
 
         # if right sum is greater,
         # update left sum with temporary sum
         left_sum += temp_sum
         # and partition greater elements in next iteration
         arr = greaters
-
-        return arr, left_sum
     
     # O(n)
     summation = sum(arr)
@@ -107,7 +108,7 @@ def can_split_quickselect(arr: list[int]) -> bool:
         pivot = random.choice(arr)
         # apply quickselect on pivot using partition
         # and use whichever half has greater sum
-        arr, left_sum = partition(arr, left_sum)
+        partition()
 
         if left_sum == half_sum:
             return True
