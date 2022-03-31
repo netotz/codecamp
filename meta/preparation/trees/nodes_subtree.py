@@ -47,55 +47,64 @@ class Node:
     self.children: list[Node] = []
 
 
-def find_subtree(root: Node, index: int) -> Node:
+def map_tree(root):
+    '''
+    O(n)
+    '''
+    treemap = dict()
+
     curr_lvl = deque([root])
     nxt_lvl = deque()
-    
+
     while curr_lvl:
         node = curr_lvl.popleft()
-        
-        if node.val == index:
-            return node
-        
+
+        if node.val in treemap:
+            continue
+        treemap[node.val] = node
+
         for child in node.children:
-            if child.val == index:
-                return child
             nxt_lvl.append(child)
-        
+
         if not curr_lvl:
             curr_lvl = nxt_lvl
             nxt_lvl = deque()
 
-            
-def count_nodes(subtree: Node, char: str, string: str):
+    return treemap
+
+
+def count_nodes(subtree, char, string):
     curr_lvl = deque([subtree])
     nxt_lvl = deque()
-    
+
     count = 0
-    
+
     while curr_lvl:
         node = curr_lvl.popleft()
-        
+
         if string[node.val - 1] == char:
             count += 1
-        
+
         for child in node.children:
             nxt_lvl.append(child)
-        
+
         if not curr_lvl:
             curr_lvl = nxt_lvl
             nxt_lvl = deque()
-    
+
     return count
 
 
-def count_of_nodes(root: Node, queries: list[list[int]], s: str):
-    counts = []
+def count_of_nodes(root, queries, s):    
+    # O(n)
+    treemap = map_tree(root)
 
+    counts = []
     # O(qn)
     for u, c in queries:
-        subtree = find_subtree(root, u)
+        subtree = treemap[u]
+        # O(n)
         count = count_nodes(subtree, c, s)
         counts.append(count)
-
     return counts
+
