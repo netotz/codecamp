@@ -33,12 +33,46 @@ no empty tree, queries
 no repeated chars?
 
 for every query (u,c), O(q)
-  find subtree u, O(n)
-  count nodes in subtree that are c, O(n)
+    find subtree u using BFS, O(n)
+    count nodes in subtree that are c using BFS, O(n)
+total of O(qn)
+
+every query, 2 traversals of the tree is done.
+this is repeated work because several nodes would be visited several times,
+in both finding a subtree and counting nodes.
+to improve this we can use a hashmap to store tree's data by traversing it once before processing the queries.
+the key would be the node's index and the value the string of that subtree:
+e.g. hashmap = {
+    1: "aba",
+    2: "b",
+    3: "a"
+}
+
+map tree using DFS, O(n)
+for every query (u, c), O(q)
+    count char c in hashmap[u], O(n)
+
+still worst case of O(qn).
+this is still doing duplicated work because when counting nodes, the string of the subtree is being traversed.
+we can take advantage of the pre-exploration of the tree and store the characters count of the subtree, instead of its string.
+the value of the hashmap would be then another hashmap whose keys are the characters and values are their count:
+e.g. hashmap = {
+    1: {
+        a: 2,
+        b: 1
+    },
+    2: {b: 1},
+    3: {a: 1},
+}
+
+map tree and count chars using DFS, O(n)
+for every query (u, c), O(q)
+    access count of char c in hashmap[u], O(1)
+reducing the time complexity to O(n + q), but adding space complexity of O(n)
 '''
 
 
-from collections import deque
+import pytest
 
 
 class Node: 
@@ -47,64 +81,87 @@ class Node:
     self.children: list[Node] = []
 
 
-def map_tree(root):
+def count_of_nodes(root, queries, s):
     '''
-    O(n)
+    O(n + q)
     '''
-    treemap = dict()
 
-    curr_lvl = deque([root])
-    nxt_lvl = deque()
-
-    while curr_lvl:
-        node = curr_lvl.popleft()
-
-        if node.val in treemap:
-            continue
-        treemap[node.val] = node
-
+    def map_subtree(node: Node, treemap, string: str):
+        '''
+        O(n)
+        '''
+        index = node.val - 1
+        char = string[index]
+        charsmap = dict()
+        charsmap[char] = 1
+        
         for child in node.children:
-            nxt_lvl.append(child)
+            treemap = map_subtree(child, treemap, string)
+            
+            # O(26) = O(1)
+            for char in treemap[child.val]:
+                if char in charsmap:
+                    charsmap[char] += treemap[child.val][char]
+                else:
+                    charsmap[char] = treemap[child.val][char]
+        
+        treemap[node.val] = charsmap
+        return treemap
+        
+        '''
+        n = 1
+        tm = {}
+        cm = {a: 1}
+            n = 2
+            tm = {}
+            cm = {b: 1}
+            tm = {2: {b: 1}}
+        cm = {a: 1, b: 1}
+            n = 3
+            tm = {2: {b: 1}}
+            cm = {a: 1}
+            tm = {2: {b: 1}, 3: {a: 1}}
+        cm = {a: 2, b: 1}
+        tm = {2: {b: 1}, 3: {a: 1}, 1: {a: 2, b: 1}}
 
-        if not curr_lvl:
-            curr_lvl = nxt_lvl
-            nxt_lvl = deque()
+        u, c = 1, a
+        count = tm[1][a] = 2
+        '''
 
-    return treemap
-
-
-def count_nodes(subtree, char, string):
-    curr_lvl = deque([subtree])
-    nxt_lvl = deque()
-
-    count = 0
-
-    while curr_lvl:
-        node = curr_lvl.popleft()
-
-        if string[node.val - 1] == char:
-            count += 1
-
-        for child in node.children:
-            nxt_lvl.append(child)
-
-        if not curr_lvl:
-            curr_lvl = nxt_lvl
-            nxt_lvl = deque()
-
-    return count
-
-
-def count_of_nodes(root, queries, s):    
     # O(n)
-    treemap = map_tree(root)
-
+    treemap = map_subtree(root, dict(), s)
     counts = []
-    # O(qn)
+    # O(q)
     for u, c in queries:
-        subtree = treemap[u]
-        # O(n)
-        count = count_nodes(subtree, c, s)
+        count = treemap[u][c]
         counts.append(count)
     return counts
 
+
+s_1 = "aba"
+root_1 = Node(1) 
+root_1.children.append(Node(2)) 
+root_1.children.append(Node(3)) 
+queries_1 = [(1, 'a')]
+expected_1 = [2]
+
+s_2 = "abaacab"
+root_2 = Node(1)
+root_2.children.append(Node(2))
+root_2.children.append(Node(3))
+root_2.children.append(Node(7))
+root_2.children[0].children.append(Node(4))
+root_2.children[0].children.append(Node(5))
+root_2.children[1].children.append(Node(6))
+queries_2 = [[1, 'a'],[2, 'b'],[3, 'a']]
+expected_2 = [4, 1, 2]
+
+
+@pytest.mark.parametrize(
+    ('root', 'queries', 'string', 'counts'), [
+        (root_1, queries_1, s_1, expected_1),
+        (root_2, queries_2, s_2, expected_2)
+    ]
+)
+def test(root, queries, string, counts):
+    assert count_of_nodes(root, queries, string) == counts
