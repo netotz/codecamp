@@ -72,6 +72,8 @@ reducing the time complexity to O(n + q), but adding space complexity of O(n)
 '''
 
 
+from collections import defaultdict
+
 import pytest
 
 
@@ -83,16 +85,20 @@ class Node:
 
 def count_of_nodes(root, queries, s):
     '''
-    O(n + q)
+    Time O(n + q)
+
+    Space O(n)
     '''
 
     def map_subtree(node: Node, treemap, string: str):
         '''
-        O(n)
+        Recursive DFS.
+
+        Time O(n)
         '''
         index = node.val - 1
         char = string[index]
-        charsmap = dict()
+        charsmap = defaultdict(int)
         charsmap[char] = 1
         
         for child in node.children:
@@ -100,42 +106,36 @@ def count_of_nodes(root, queries, s):
             
             # O(26) = O(1)
             for char in treemap[child.val]:
-                if char in charsmap:
-                    charsmap[char] += treemap[child.val][char]
-                else:
-                    charsmap[char] = treemap[child.val][char]
+                charsmap[char] += treemap[child.val][char]
         
         treemap[node.val] = charsmap
         return treemap
-        
-        '''
-        n = 1
-        tm = {}
-        cm = {a: 1}
-            n = 2
-            tm = {}
-            cm = {b: 1}
-            tm = {2: {b: 1}}
-        cm = {a: 1, b: 1}
-            n = 3
-            tm = {2: {b: 1}}
-            cm = {a: 1}
-            tm = {2: {b: 1}, 3: {a: 1}}
-        cm = {a: 2, b: 1}
-        tm = {2: {b: 1}, 3: {a: 1}, 1: {a: 2, b: 1}}
-
-        u, c = 1, a
-        count = tm[1][a] = 2
-        '''
 
     # O(n)
     treemap = map_subtree(root, dict(), s)
-    counts = []
+
     # O(q)
-    for u, c in queries:
-        count = treemap[u][c]
-        counts.append(count)
-    return counts
+    return [treemap[u][c] for u, c in queries]
+
+'''
+n = 1
+tm = {}
+cm = {a: 1}
+    n = 2
+    tm = {}
+    cm = {b: 1}
+    tm = {2: {b: 1}}
+cm = {a: 1, b: 1}
+    n = 3
+    tm = {2: {b: 1}}
+    cm = {a: 1}
+    tm = {2: {b: 1}, 3: {a: 1}}
+cm = {a: 2, b: 1}
+tm = {2: {b: 1}, 3: {a: 1}, 1: {a: 2, b: 1}}
+
+u, c = 1, a
+count = tm[1][a] = 2
+'''
 
 
 s_1 = "aba"
