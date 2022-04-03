@@ -37,6 +37,7 @@ return total
 
 k ~ n | n > k, O(n log n)
 k > n, O(k log n)
+average, O((n + k) log n)
 
 a = [2, 1, 7, 4, 2]
 h = [2, 1, 2, 2, 1]
