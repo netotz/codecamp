@@ -37,8 +37,7 @@ def findMaxProduct(arr: list[int]) -> list[int]:
     O(n)
     '''
     output = [0] * len(arr)
-    # min-heap, an ordered binary tree,
-    # first element always is the smallest of all.
+    # min-heap, first element always is the smallest of all.
     # in this case, max size of our heap will be h = 3
     heap = []
     
