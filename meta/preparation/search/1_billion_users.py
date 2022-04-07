@@ -55,7 +55,9 @@ in O(n log t).
 ---
 get max possible days, m = ceil log_max(apps)(10**9), O(n)
 do binary search to find t, from 1 to m, O(log m)
-total time O(n log m), where t <~ m? O(n log t)?
+total time O(n log m), where t <= m
+
+https://leetcode.com/discuss/interview-question/746520/Facebook-or-Recruiting-Portal-or-1-Billion-Users/1340628
 '''
 
 
@@ -67,7 +69,7 @@ BILLION = 10 ** 9
 
 def getBillionUsersDay(growthRates):
     '''
-    Time O(n log m) ~ O(n log t)?
+    Time O(n log m)
     
     Space O(1)
     '''
@@ -78,7 +80,7 @@ def getBillionUsersDay(growthRates):
 
     l = 1
     r = max_days
-    # O(log m)
+    # O(n log m)
     while l <= r:
         mid = (r + l) // 2
 
@@ -103,17 +105,16 @@ def getBillionUsersDay_brute(growthRates):
     
     Space O(1)
     '''
-    days = 1
+    days = 0
+    users = 0
     # O(nt)
-    while True:
+    while users < BILLION:
+        days += 1
         users = 0
         # O(n)
         for app in growthRates:
             users += app ** days
             if users >= BILLION:
                 break
-        if users >= BILLION:
-            break
-        days += 1
     
     return days
