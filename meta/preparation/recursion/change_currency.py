@@ -30,7 +30,7 @@ use BFS, return true when first 0 is reached, O(td)
 from collections import deque
 
 
-def canGetExactChange(targetMoney, denominations):
+def canGetExactChange(targetMoney, denominations) -> bool:
     '''
     Use BFS.
     
@@ -38,31 +38,24 @@ def canGetExactChange(targetMoney, denominations):
     
     Space O(t)
     '''
-    current_level = deque([targetMoney])
-    next_level = deque()
+    # set index 0 to true, rest to false
+    is_visited = [True] + [False] * targetMoney
+
+    queue = deque([targetMoney])
     
-    visiteds = [True] + [False] * targetMoney
-    
-    level = 0
     # O(t)
-    while len(current_level) > 0:
-        amount = current_level.popleft()
+    while len(queue) > 0:
+        curr_amount = queue.popleft()
         
         # O(d)
         for value in denominations:
-            subtraction = amount - value
+            subtraction = curr_amount - value
             # when first valid path is found
             if subtraction == 0:
                 return True
             
-            if subtraction >= 0 and not visiteds[subtraction]:
-                next_level.append(subtraction)
-                visiteds[subtraction] = True
-
-        # swap levels
-        if len(current_level) == 0:
-            current_level = next_level
-            next_level = deque()
-            level += 1
+            if subtraction >= 0 and not is_visited[subtraction]:
+                queue.append(subtraction)
+                is_visited[subtraction] = True
 
     return False
