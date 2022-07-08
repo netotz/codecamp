@@ -13,7 +13,9 @@ import pytest
 
 def unionfind(nodes: int, edges: list[list[int]]) -> int:
     """
-    time O(e + log n)?
+    time O(e + log n)
+
+    space O(n)
     """
 
     def find(v: int) -> int:
@@ -40,6 +42,8 @@ def unionfind(nodes: int, edges: list[list[int]]) -> int:
             return False
 
         # add shorter group as child of bigger group
+        # to approach a tree like structure
+        # rather than a linked list one
         if sizes[up] > sizes[vp]:
             parents[vp] = up
             sizes[up] += sizes[vp]
@@ -65,6 +69,8 @@ def unionfind(nodes: int, edges: list[list[int]]) -> int:
 
 def count_components(nodes: int, edges: list[list[int]]) -> int:
     """
+    Build adjacency list from edges and do BFS to count components.
+
     time O(n + e)
 
     space O(ne)
