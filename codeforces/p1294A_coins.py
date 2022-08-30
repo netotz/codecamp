@@ -1,3 +1,8 @@
+"""
+https://codeforces.com/problemset/problem/1294/A
+"""
+
+
 def can_distribute(a: int, b: int, c: int, n: int) -> bool:
     """
     time O(1)
@@ -5,11 +10,13 @@ def can_distribute(a: int, b: int, c: int, n: int) -> bool:
     space O(1)
     """
     max_coins = max(a, b, c)
-    x = max_coins - a
-    y = max_coins - b
-    z = max_coins - c
 
-    remainder = n - x - y - z
+    # differences to match amounts to max amount
+    a_diff = max_coins - a
+    b_diff = max_coins - b
+    c_diff = max_coins - c
+
+    remainder = n - a_diff - b_diff - c_diff
     return remainder >= 0 and remainder % 3 == 0
 
 
