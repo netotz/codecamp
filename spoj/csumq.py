@@ -1,8 +1,7 @@
 def solve_query(sums: list[int], query: tuple[int, int]) -> int:
     i, j = query
-    offset = 1 if i > 0 else 0
 
-    return sums[j] - sums[i - offset]
+    return sums[j] - (sums[i - 1] if i > 0 else 0)
 
 
 def get_cumulative_sum(array: list[int]) -> list[int]:
@@ -12,7 +11,7 @@ def get_cumulative_sum(array: list[int]) -> list[int]:
     # O(n)
     for i in range(len(array)):
         curr_sum += array[i]
-        sums[i] = curr_sum
+        sums.append(curr_sum)
 
     return sums
 
